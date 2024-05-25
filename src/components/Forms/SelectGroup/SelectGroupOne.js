@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SelectGroupOne = () => {
+const SelectGroupOne = ({name, options=[]}) => {
   const [selectedOption, setSelectedOption] = useState('');
   const [isOptionSelected, setIsOptionSelected] = useState(false);
 
@@ -9,10 +9,10 @@ const SelectGroupOne = () => {
   };
 
   return (
-    <div className="mb-4.5">
+    <div className="mb-4.5 min-w-50">
       <label className="mb-2.5 block text-black dark:text-white">
         {' '}
-        Subject{' '}
+        {name}{' '}
       </label>
 
       <div className="relative z-20 bg-transparent dark:bg-form-input">
@@ -27,7 +27,7 @@ const SelectGroupOne = () => {
           }`}
         >
           <option value="" disabled className="text-body dark:text-bodydark">
-            Select your subject
+            Select {name}
           </option>
           <option value="USA" className="text-body dark:text-bodydark">
             USA

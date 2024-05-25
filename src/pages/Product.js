@@ -10,8 +10,6 @@ import ProductTable from '../components/Tables/ProductTable';
 import { fetcher } from '../service/fetchconfig';
 
 
-let i = 1;
-
 const ProductPage = () => {
 
   const [products, setProducts] = useState([]);

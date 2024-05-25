@@ -17,6 +17,8 @@ import Buttons from './pages/UiElements/Buttons';
 import User from './pages/User';
 import Category from './pages/Category';
 import Product from './pages/Product';
+import ProductDetail from './pages/ProductDetail';
+import ProductEdit from './pages/ProductEdit';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -93,8 +95,26 @@ function App() {
           path="/product"
           element={
             <>
-              <PageTitle title="Tables | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Products | MuIn" />
               <Product />
+            </>
+          }
+        />
+         <Route
+          path="/products/:productId"
+          element={
+            <>
+              <PageTitle title="Product Detail | MuIn" />
+              <ProductDetail />
+            </>
+          }
+        />
+         <Route
+          path="/products/edit/:productId"
+          element={
+            <>
+              <PageTitle title="Product Edit | MuIn" />
+              <ProductEdit />
             </>
           }
         />
