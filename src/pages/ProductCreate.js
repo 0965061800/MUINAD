@@ -13,18 +13,22 @@ import flattenCategories from "../utils/flatternCat";
 import SelectBrand from "../components/Forms/SelectGroup/SelectBrand";
 import SelectFeature from "../components/Forms/SelectGroup/SelectFeature";
 import Toggle from "../components/Switchers/Toggle";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import SelectColor from "../components/Forms/SelectGroup/SelectColor";
+import axios from "axios";
+import useFirebaseImage from "../hooks/useFirebaseImage";
+import ImageUpload from "../components/Images/ImageUpload";
 
-const ProductEdit = () => {
+const ProductCreate = () => {
   const { productId } = useParams();
-  const [content, setContent] = useState("")
-  console.log(content)
+  const [content, setContent] = useState("");
   const {
     control,
     reset,
     watch,
     setValue,
+    getValues,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({
@@ -32,60 +36,83 @@ const ProductEdit = () => {
     defaultValues: {},
   });
 
-  
-  const { data: productData, error: productError } = useSWR(
-    `https://localhost:7137/api/Product/${productId}`,
-    fetcher
-  );
-  
+  const {
+    image,
+    handleResetUpload,
+    progress,
+    handleSelectImage,
+    handleDeleteImage,
+  } = useFirebaseImage(setValue, getValues);
   const { data: catData, error: catError } = useSWR(
     `https://localhost:7137/api/Category`,
     fetcher
   );
-  
+
+  const { data: colorData, error: colorError } = useSWR(
+    `https://localhost:7137/api/Color`,
+    fetcher
+  );
+
   const { data: brandData, error: brandError } = useSWR(
     `https://localhost:7137/api/Brand`,
     fetcher
   );
-  
+
   const { data: featureData, error: featureError } = useSWR(
     `https://localhost:7137/api/Feature`,
     fetcher
   );
-  
+
   const [categories, setCategories] = useState([]);
-  
-  useEffect(() => {
-    if (productData) {
-      reset(productData);
-      setContent(productData.specifications)
-    }
-  }, [productData, reset]);
-  
+
   useEffect(() => {
     if (catData) {
       setCategories(flattenCategories(catData));
     }
   }, [catData]);
-  
-  const handleUpdateProduct = async (values) => {
-    console.log(values);
+
+  const handleCreateProduct = async (values) => {
+    console.log({
+      ...values,
+      specifications: content,
+      categoryId: parseInt(values.categoryId, 10),
+      brandId: parseInt(values.brandId, 10),
+      featureId: parseInt(values.fetureId, 10),
+      colorId: parseInt(values.colorId, 10),
+      productPrice: parseFloat(values.productPrice)
+    });
+    axios.post('https://localhost:7137/api/Product', {
+        ...values, 
+        specifications: content,
+        categoryId: parseInt(values.categoryId, 10),
+        brandId: parseInt(values.brandId, 10),
+        featureId: parseInt(values.featureId, 10),
+        colorId: parseInt(values.colorId, 10),
+        productPrice: parseFloat(values.productPrice)
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
-  
+
   const watchBestSeller = watch("bestSeller");
   const watchActive = watch("Active");
-  
-  if (productError || catError || brandError || featureError) {
+
+  if (catError || brandError || featureError || colorError) {
     return <div>Error loading data</div>;
   }
 
-  if (!productData || !catData || !brandData || !featureData) {
+  if (!catData || !brandData || !featureData || !colorData) {
     return <div>Loading...</div>;
   }
 
+
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Product Edit" />
+      <Breadcrumb pageName="Product Create" />
 
       <div className="flex gap-10">
         <div className="flex flex-col gap-9">
@@ -96,7 +123,7 @@ const ProductEdit = () => {
                 Edit form
               </h3>
             </div>
-            <form onSubmit={handleSubmit(handleUpdateProduct)}>
+            <form onSubmit={handleSubmit(handleCreateProduct)}>
               <div className="p-6.5">
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                   <div className="w-full xl:w-1/2">
@@ -110,7 +137,7 @@ const ProductEdit = () => {
                     <label className="mb-2.5 block text-black dark:text-white">
                       <span className="text-meta-1">*</span>Price
                     </label>
-                    <Input name="productPrice" control={control}></Input>
+                    <Input name="productPrice"  type="number" control={control}></Input>
                   </div>
 
                   <div className="w-full xl:w-1/2">
@@ -147,7 +174,22 @@ const ProductEdit = () => {
                     <Input name="sale" control={control}></Input>
                   </div>
                 </div>
-
+                <div className="mb-4.5  flex flex-col gap-6 xl:flex-row">
+                  <div className="w-full xl:w-1/2">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Code
+                    </label>
+                    <Input name="productCode" control={control}></Input>
+                  </div>
+                  <div className="w-full xl:w-1/2 flex gap-4">
+                    <SelectColor
+                      name="colorId"
+                      control={control}
+                      labelName="Default Color"
+                      options={colorData}
+                    />
+                  </div>
+                </div>
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
                     Description
@@ -180,7 +222,11 @@ const ProductEdit = () => {
                   <label className="mb-2.5 block text-black dark:text-white">
                     Specifications
                   </label>
-                  <ReactQuill theme="snow" value={content} onChange={setContent} />
+                  <ReactQuill
+                    theme="snow"
+                    value={content}
+                    onChange={setContent}
+                  />
                 </div>
 
                 <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
@@ -190,9 +236,18 @@ const ProductEdit = () => {
             </form>
           </div>
         </div>
+        <div className="w-full">
+          <ImageUpload
+            onChange={handleSelectImage}
+            handleDeleteImage={handleDeleteImage}
+            className="h-[250px]"
+            progress={progress}
+            image={image}
+          ></ImageUpload>
+        </div>
       </div>
     </DefaultLayout>
   );
 };
 
-export default ProductEdit;
+export default ProductCreate;

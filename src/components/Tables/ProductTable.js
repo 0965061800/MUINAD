@@ -26,7 +26,7 @@ const ProductTable = ({ products = [] }) => {
         </div>
         <div className="col-span-2 flex items-center">
           <Link
-            to="/ProductDetail"
+            to="/create-product"
             className="inline-flex items-center justify-center rounded-full bg-black py-2 px-10 text-center font-medium text-white hover:bg-slate-500 lg:px-4 xl:px-6"
           >
             Create New

@@ -19,6 +19,7 @@ import Category from './pages/Category';
 import Product from './pages/Product';
 import ProductDetail from './pages/ProductDetail';
 import ProductEdit from './pages/ProductEdit';
+import ProductCreate from './pages/ProductCreate';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -115,6 +116,15 @@ function App() {
             <>
               <PageTitle title="Product Edit | MuIn" />
               <ProductEdit />
+            </>
+          }
+        />
+        <Route
+          path="/create-product"
+          element={
+            <>
+              <PageTitle title="Product Edit | MuIn" />
+              <ProductCreate />
             </>
           }
         />
