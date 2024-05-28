@@ -15,24 +15,51 @@ import SelectFeature from "../components/Forms/SelectGroup/SelectFeature";
 import Toggle from "../components/Switchers/Toggle";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import ImageUpload from "../components/Images/ImageUpload";
+import useFirebaseImage from "../hooks/useFirebaseImage";
+import SelectColor from "../components/Forms/SelectGroup/SelectColor";
+import axios from "axios";
+
+const  imageUrlName = "productImage"
+const imageName = "imageName"
 
 const ProductEdit = () => {
   const { productId } = useParams();
   const [content, setContent] = useState("")
-  console.log(content)
   const {
     control,
     reset,
     watch,
     setValue,
+    getValues,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({
     mode: "onChange",
     defaultValues: {},
   });
+  const {
+    image,
+    setImage,
+    progress,
+    handleSelectImage,
+    handleDeleteImage,
+  } = useFirebaseImage(setValue, getValues, imageUrlName, imageName, deletePostImage);
 
-  
+  async function deletePostImage() {
+    axios.put(`https://localhost:7137/api/Product/${productId}`, {
+        ...productData,
+        imageName: "",
+        productImage: ""
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   const { data: productData, error: productError } = useSWR(
     `https://localhost:7137/api/Product/${productId}`,
     fetcher
@@ -59,8 +86,9 @@ const ProductEdit = () => {
     if (productData) {
       reset(productData);
       setContent(productData.specifications)
+      setImage(productData.productImage)
     }
-  }, [productData, reset]);
+  }, [productData, reset, setImage]);
   
   useEffect(() => {
     if (catData) {
@@ -68,12 +96,37 @@ const ProductEdit = () => {
     }
   }, [catData]);
   
+  
+
+
   const handleUpdateProduct = async (values) => {
-    console.log(values);
+    console.log({
+      ...values,
+      specifications: content,
+      categoryId: parseInt(values.categoryId, 10),
+      brandId: parseInt(values.brandId, 10),
+      featureId: parseInt(values.fetureId, 10),
+      colorId: parseInt(values.colorId, 10),
+      productPrice: parseFloat(values.productPrice)
+    });
+    axios.put(`https://localhost:7137/api/Product/${productId}`, {
+      ...values, 
+      specifications: content,
+      categoryId: parseInt(values.categoryId, 10),
+      brandId: parseInt(values.brandId, 10),
+      featureId: parseInt(values.featureId, 10),
+      colorId: parseInt(values.colorId, 10),
+      productPrice: parseFloat(values.productPrice)
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
   
   const watchBestSeller = watch("bestSeller");
-  const watchActive = watch("Active");
   
   if (productError || catError || brandError || featureError) {
     return <div>Error loading data</div>;
@@ -85,7 +138,7 @@ const ProductEdit = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Product Edit" />
+      <Breadcrumb pageName="Product Create" />
 
       <div className="flex gap-10">
         <div className="flex flex-col gap-9">
@@ -93,7 +146,7 @@ const ProductEdit = () => {
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
-                Edit form
+                Create product
               </h3>
             </div>
             <form onSubmit={handleSubmit(handleUpdateProduct)}>
@@ -103,21 +156,21 @@ const ProductEdit = () => {
                     <label className="mb-2.5 block text-black dark:text-white">
                       <span className="text-meta-1">*</span>Product Name
                     </label>
-                    <Input name="productName" control={control}></Input>
+                    <Input name="productName" placeholder="Enter product's name" control={control}></Input>
                   </div>
 
                   <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
                       <span className="text-meta-1">*</span>Price
                     </label>
-                    <Input name="productPrice" control={control}></Input>
+                    <Input name="productPrice" placeholder="Enter product's price" type="number" control={control}></Input>
                   </div>
 
                   <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Alias
                     </label>
-                    <Input name="alias" control={control}></Input>
+                    <Input name="alias" placeholder="Enter product's alias" control={control}></Input>
                   </div>
                 </div>
 
@@ -131,23 +184,19 @@ const ProductEdit = () => {
                       onClick={() => setValue("bestSeller", !watchBestSeller)}
                     />
                   </div>
-                  <div className="w-full xl:w-1/2 flex gap-4">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Active
-                    </label>
-                    <Toggle
-                      on={watchBestSeller === true}
-                      onClick={() => setValue("bestSeller", !watchBestSeller)}
-                    />
-                  </div>
-                  <div className="w-full xl:w-1/2 flex gap-4">
+                  <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Sale
                     </label>
-                    <Input name="sale" control={control}></Input>
+                    <Input name="sale"  placeholder="Enter product's sale" control={control}></Input>
+                  </div>
+                  <div className="w-full xl:w-1/2">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Code
+                    </label>
+                    <Input name="productCode" placeholder="Enter product's code" control={control}></Input>
                   </div>
                 </div>
-
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
                     Description
@@ -180,7 +229,11 @@ const ProductEdit = () => {
                   <label className="mb-2.5 block text-black dark:text-white">
                     Specifications
                   </label>
-                  <ReactQuill theme="snow" value={content} onChange={setContent} />
+                  <ReactQuill
+                    theme="snow"
+                    value={content}
+                    onChange={setContent}
+                  />
                 </div>
 
                 <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
@@ -189,6 +242,15 @@ const ProductEdit = () => {
               </div>
             </form>
           </div>
+        </div>
+        <div className="w-full">
+          <ImageUpload
+            onChange={handleSelectImage}
+            handleDeleteImage={handleDeleteImage}
+            className="h-[250px]"
+            progress={progress}
+            image={image}
+          ></ImageUpload>
         </div>
       </div>
     </DefaultLayout>

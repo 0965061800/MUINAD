@@ -11,15 +11,18 @@ import {
 export default function useFirebaseImage(
     setValue,
     getValues,
+    imageUrlName = null,
     imageName = null,
-    cb = null
+    cb = null,
 ) {
     const [progress, setProgress] = useState(0);
     const [image, setImage] = useState("");
+    console.log(image);
     if (!setValue || !getValues) return;
     const handleUploadImage = (file) => {
     const storage = getStorage();
     const storageRef = ref(storage, "images/" + file.name);
+
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
       "state_changed",
@@ -44,16 +47,21 @@ export default function useFirebaseImage(
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log(imageUrlName);
           console.log("File available at", downloadURL);
+          setValue(imageUrlName,downloadURL);
           setImage(downloadURL);
+          console.log(2);
         });
       }
     );
   };
   const handleSelectImage = (e) => {
+    console.log(imageName, imageUrlName)
     const file = e.target.files[0];
     if (!file) return;
-    setValue("image", file.name);
+    console.log(1);
+    setValue(imageName, file.name);
     handleUploadImage(file);
   };
 
@@ -61,13 +69,14 @@ export default function useFirebaseImage(
     const storage = getStorage();
     const imageRef = ref(
       storage,
-      "images/" + (imageName || getValues("image_name"))
+      "images/" + (getValues(imageName))
     );
     deleteObject(imageRef)
       .then(() => {
         console.log("Remove image successfully");
         setImage("");
         setProgress(0);
+        console.log(1);
         cb && cb();
       })
       .catch((error) => {

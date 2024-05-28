@@ -16,6 +16,7 @@ const ProductPage = () => {
 
   const { data, error} = useSWR('https://localhost:7137/api/Product', fetcher)
   
+  
   useEffect(() =>{
     if (data && data.data) setProducts(data.data)
   },[data]);
@@ -25,7 +26,7 @@ const ProductPage = () => {
       <Breadcrumb pageName="Products"/>
 
       <div className="flex flex-col gap-10">
-        <ProductTable products = {products ?? []}/>
+        <ProductTable products = {products ?? []} onDelete={(value) => setProducts(value)}/>
       </div>
     </DefaultLayout>
   );

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "../layout/DefaultLayout";
-import SelectGroupOne from "../components/Forms/SelectGroup/SelectGroupOne";
-import SwitcherOne from "../components/Switchers/SwitcherOne";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import useSWR from "swr";
 import { fetcher } from "../service/fetchconfig";
 import { useParams } from "react-router-dom";
@@ -19,9 +17,35 @@ import SelectColor from "../components/Forms/SelectGroup/SelectColor";
 import axios from "axios";
 import useFirebaseImage from "../hooks/useFirebaseImage";
 import ImageUpload from "../components/Images/ImageUpload";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+
+const  imageUrlName = "productImage"
+const imageName = "imageName"
+
+const schema = yup.object({
+  productName: yup
+    .string()
+    .min(10, "Please enter product's name more than 10 character")
+    .required("Please enter product's name"),
+  productPrice: yup
+    .number("Please enter your's productPrice like a number")
+    .required("Please enter your's productPrice"),
+  productCode: yup
+    .string()
+    .min(5, "Please enter product's code more than 5 character")
+    .required("Please enter product's code"),
+  alias: yup
+    .string()
+    .min(5, "Please enter product's alias more than 5 characters"),
+  colorId: yup
+    .number("Please choose product's color")
+    .required("Please choose a default color"),
+});
 
 const ProductCreate = () => {
-  const { productId } = useParams();
   const [content, setContent] = useState("");
   const {
     control,
@@ -30,19 +54,24 @@ const ProductCreate = () => {
     setValue,
     getValues,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isValid, errors },
   } = useForm({
     mode: "onChange",
-    defaultValues: {},
+    defaultValues: {
+    },
+    resolver: yupResolver(schema),
   });
+
+
 
   const {
     image,
     handleResetUpload,
+    setImage,
     progress,
     handleSelectImage,
     handleDeleteImage,
-  } = useFirebaseImage(setValue, getValues);
+  } = useFirebaseImage(setValue, getValues, imageUrlName, imageName);
   const { data: catData, error: catError } = useSWR(
     `https://localhost:7137/api/Category`,
     fetcher
@@ -71,16 +100,18 @@ const ProductCreate = () => {
     }
   }, [catData]);
 
+  useEffect(() => {
+    const arrErroes = Object.values(errors);
+    if (arrErroes.length > 0) {
+      toast.error(arrErroes[0]?.message, {
+        pauseOnHover: false,
+        delay: 0,
+      });
+    }
+  }, [errors]);
+
   const handleCreateProduct = async (values) => {
-    console.log({
-      ...values,
-      specifications: content,
-      categoryId: parseInt(values.categoryId, 10),
-      brandId: parseInt(values.brandId, 10),
-      featureId: parseInt(values.fetureId, 10),
-      colorId: parseInt(values.colorId, 10),
-      productPrice: parseFloat(values.productPrice)
-    });
+
     axios.post('https://localhost:7137/api/Product', {
         ...values, 
         specifications: content,
@@ -91,7 +122,8 @@ const ProductCreate = () => {
         productPrice: parseFloat(values.productPrice)
       })
       .then(function (response) {
-        console.log(response);
+        console.log(1);
+        Swal.fire("Created!", "Your product has been created.", "success");
       })
       .catch(function (error) {
         console.log(error);
@@ -99,7 +131,8 @@ const ProductCreate = () => {
   };
 
   const watchBestSeller = watch("bestSeller");
-  const watchActive = watch("Active");
+  // const watchActive = watch("active");
+  // console.log(watchBestSeller,watchActive);
 
   if (catError || brandError || featureError || colorError) {
     return <div>Error loading data</div>;
@@ -120,7 +153,7 @@ const ProductCreate = () => {
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
-                Edit form
+                Create product
               </h3>
             </div>
             <form onSubmit={handleSubmit(handleCreateProduct)}>
@@ -130,21 +163,21 @@ const ProductCreate = () => {
                     <label className="mb-2.5 block text-black dark:text-white">
                       <span className="text-meta-1">*</span>Product Name
                     </label>
-                    <Input name="productName" control={control}></Input>
+                    <Input name="productName" placeholder="Enter product's name" control={control}></Input>
                   </div>
 
                   <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
                       <span className="text-meta-1">*</span>Price
                     </label>
-                    <Input name="productPrice"  type="number" control={control}></Input>
+                    <Input name="productPrice" placeholder="Enter product's price" type="number" control={control}></Input>
                   </div>
 
                   <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Alias
                     </label>
-                    <Input name="alias" control={control}></Input>
+                    <Input name="alias" placeholder="Enter product's alias" control={control}></Input>
                   </div>
                 </div>
 
@@ -158,20 +191,20 @@ const ProductCreate = () => {
                       onClick={() => setValue("bestSeller", !watchBestSeller)}
                     />
                   </div>
-                  <div className="w-full xl:w-1/2 flex gap-4">
+                  {/* <div className="w-full xl:w-1/2 flex gap-4">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Active
                     </label>
                     <Toggle
-                      on={watchBestSeller === true}
-                      onClick={() => setValue("bestSeller", !watchBestSeller)}
+                      on={watchActive === true}
+                      onClick={() => setValue("active", !watchActive)}
                     />
-                  </div>
+                  </div> */}
                   <div className="w-full xl:w-1/2 flex gap-4">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Sale
                     </label>
-                    <Input name="sale" control={control}></Input>
+                    <Input name="sale"  placeholder="Enter product's sale" control={control}></Input>
                   </div>
                 </div>
                 <div className="mb-4.5  flex flex-col gap-6 xl:flex-row">
@@ -179,7 +212,7 @@ const ProductCreate = () => {
                     <label className="mb-2.5 block text-black dark:text-white">
                       Code
                     </label>
-                    <Input name="productCode" control={control}></Input>
+                    <Input name="productCode" placeholder="Enter product's code" control={control}></Input>
                   </div>
                   <div className="w-full xl:w-1/2 flex gap-4">
                     <SelectColor
