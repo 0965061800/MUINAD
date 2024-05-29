@@ -122,7 +122,6 @@ const ProductCreate = () => {
         productPrice: parseFloat(values.productPrice)
       })
       .then(function (response) {
-        console.log(1);
         Swal.fire("Created!", "Your product has been created.", "success");
       })
       .catch(function (error) {

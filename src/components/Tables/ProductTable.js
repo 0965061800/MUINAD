@@ -64,7 +64,7 @@ const ProductTable = ({ products = [] , onDelete = f => f}) => {
           <div className="col-span-2 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="h-12.5 w-15 rounded-md">
-                <img src={product.productImage} alt="Product" />
+                <img src={product.productImage} alt="Product" className="w-full h-full object-cover" />
               </div>
               <p className="text-sm text-black dark:text-white">
                 {product.productName}
@@ -86,7 +86,7 @@ const ProductTable = ({ products = [] , onDelete = f => f}) => {
           </div>
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-black dark:text-white">
-              {product.Active ? "active" : "none active"}
+              {product?.Active ? "active" : "none active"}
             </p>
           </div>
           <div className="col-span-1 flex items-center">

@@ -19,6 +19,7 @@ import ImageUpload from "../components/Images/ImageUpload";
 import useFirebaseImage from "../hooks/useFirebaseImage";
 import SelectColor from "../components/Forms/SelectGroup/SelectColor";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const  imageUrlName = "productImage"
 const imageName = "imageName"
@@ -100,15 +101,6 @@ const ProductEdit = () => {
 
 
   const handleUpdateProduct = async (values) => {
-    console.log({
-      ...values,
-      specifications: content,
-      categoryId: parseInt(values.categoryId, 10),
-      brandId: parseInt(values.brandId, 10),
-      featureId: parseInt(values.fetureId, 10),
-      colorId: parseInt(values.colorId, 10),
-      productPrice: parseFloat(values.productPrice)
-    });
     axios.put(`https://localhost:7137/api/Product/${productId}`, {
       ...values, 
       specifications: content,
@@ -119,6 +111,7 @@ const ProductEdit = () => {
       productPrice: parseFloat(values.productPrice)
     })
     .then(function (response) {
+      toast.success("Update Product successfully")
       console.log(response);
     })
     .catch(function (error) {
@@ -237,7 +230,7 @@ const ProductEdit = () => {
                 </div>
 
                 <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                  Create Product
+                  Edit Product
                 </button>
               </div>
             </form>

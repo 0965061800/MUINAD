@@ -36,11 +36,11 @@ const ProductDetail = () => {
         <div className="w-full flex flex-col gap-5 rounded-sm px-5 py-5 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex gap-3 px-5">
           <div class="w-1/2">
-            <div className="product-image">
+            <div className="product-image h-70">
               <img
-                src="https://plus.unsplash.com/premium_photo-1682326302625-1e5b7826fb3c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src={product?.productImage}
                 alt=""
-                className="rounded-lg"
+                className="rounded-lg w-full h-full object-cover"
               ></img>
             </div>
           </div>

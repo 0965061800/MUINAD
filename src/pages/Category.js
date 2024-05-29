@@ -1,4 +1,5 @@
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
+import CategoryTable from '../components/Tables/CategoryTable';
 import TableOne from '../components/Tables/TableOne';
 import TableThree from '../components/Tables/TableThree';
 import TableTwo from '../components/Tables/TableTwo';
@@ -10,7 +11,7 @@ const Category = () => {
       <Breadcrumb pageName="Category" />
 
       <div className="flex flex-col gap-10">
-        <TableThree />
+        <TableOne />
       </div>
     </DefaultLayout>
   );
