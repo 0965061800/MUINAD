@@ -21,9 +21,7 @@ const ProductTable = ({ products = [] , onDelete = f => f}) => {
       if (result.isConfirmed) {
         await axios.delete(`https://localhost:7137/api/Product/${productId}`);
         Swal.fire("Deleted!", "Your product has been deleted.", "success");
-        console.log("Before delete", products);
         products = products.filter(p => p.productId !== productId);
-        console.log("After delete", products);
         onDelete(products);
       }
     });

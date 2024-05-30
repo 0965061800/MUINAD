@@ -57,8 +57,7 @@ const ProductCreate = () => {
     formState: { isSubmitting, isValid, errors },
   } = useForm({
     mode: "onChange",
-    defaultValues: {
-    },
+    defaultValues: {},
     resolver: yupResolver(schema),
   });
 
@@ -140,8 +139,6 @@ const ProductCreate = () => {
   if (!catData || !brandData || !featureData || !colorData) {
     return <div>Loading...</div>;
   }
-
-
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Product Create" />
