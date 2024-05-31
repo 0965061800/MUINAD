@@ -20,6 +20,7 @@ import Product from './pages/Product';
 import ProductDetail from './pages/ProductDetail';
 import ProductEdit from './pages/ProductEdit';
 import ProductCreate from './pages/ProductCreate';
+import Order from './pages/Order';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -125,6 +126,15 @@ function App() {
             <>
               <PageTitle title="Product Edit | MuIn" />
               <ProductCreate />
+            </>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <>
+              <PageTitle title="Order | MuIn" />
+              <Order />
             </>
           }
         />
