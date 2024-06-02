@@ -16,7 +16,6 @@ const Order = () => {
     refreshWhenHidden: false,
     refreshInterval: 0,
     })
-    console.log(orderData);
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Orders" />

@@ -1,16 +1,26 @@
 import React from 'react';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
-import ChartOne from '../components/Charts/ChartOne';
-import ChartThree from '../components/Charts/ChartThree';
-import ChartTwo from '../components/Charts/ChartTwo';
 import DefaultLayout from '../layout/DefaultLayout';
+import UserTable from '../components/User/UserTable';
+import useSWR from 'swr';
+import { fetcher } from '../service/fetchconfig';
 
 const User = () => {
+  const { data:usersData, error:usersError} = useSWR('https://localhost:7137/api/User', fetcher,  {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenOffline: false,
+    refreshWhenHidden: false,
+    refreshInterval: 0,
+    })
   return (
     <DefaultLayout>
       <Breadcrumb pageName="User" />
-      <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
-      </div>
+      {
+        usersData 
+        ? <UserTable users = {usersData}></UserTable>
+        : <></>
+      }
     </DefaultLayout>
   );
 };
