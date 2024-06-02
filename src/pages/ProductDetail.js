@@ -36,7 +36,7 @@ const ProductDetail = () => {
         <div className="w-full flex flex-col gap-5 rounded-sm px-5 py-5 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex gap-3 px-5">
           <div class="w-1/2">
-            <div className="product-image h-70">
+            <div className="product-image h-80">
               <img
                 src={product?.productImage}
                 alt=""
@@ -52,6 +52,11 @@ const ProductDetail = () => {
                   currency: "VND",
                 })}</p>
               <p className="mb-3 text-lg mn-3 font-medium text-justify">{product?.description}</p>
+              <div className="flex gap-4 mb-3">
+              {product?.productSkuDtos.map((item, key) => 
+                <p key={key} className="px-4 py-2 bg-slate-400 dark:bg-zinc-400 text-white dark:text-black font-semibold rounded-lg ">{item.colorDto.colorName}</p>
+              )}
+              </div>
               <div className="flex gap-4">
                 <p className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black font-semibold rounded-lg ">{product?.categoryName}</p>
                 <p className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black font-semibold rounded-lg ">{product?.brandName}</p>

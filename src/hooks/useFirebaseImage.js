@@ -17,7 +17,6 @@ export default function useFirebaseImage(
 ) {
     const [progress, setProgress] = useState(0);
     const [image, setImage] = useState("");
-    console.log(image);
     if (!setValue || !getValues) return;
     const handleUploadImage = (file) => {
     const storage = getStorage();

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumb from "../components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "../layout/DefaultLayout";
-import SelectGroupOne from "../components/Forms/SelectGroup/SelectGroupOne";
-import SwitcherOne from "../components/Switchers/SwitcherOne";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { fetcher } from "../service/fetchconfig";
@@ -17,9 +15,10 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageUpload from "../components/Images/ImageUpload";
 import useFirebaseImage from "../hooks/useFirebaseImage";
-import SelectColor from "../components/Forms/SelectGroup/SelectColor";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ProductSkuTable from "../components/Product/ProductSkuTable";
+import ProductSku from "../components/Product/ProductSku";
 
 const  imageUrlName = "productImage"
 const imageName = "imageName"
@@ -61,11 +60,11 @@ const ProductEdit = () => {
       });
   }
 
-  const { data: productData, error: productError } = useSWR(
+  const { data: productData, error: productError, mutate } = useSWR(
     `https://localhost:7137/api/Product/${productId}`,
     fetcher
   );
-  
+
   const { data: catData, error: catError } = useSWR(
     `https://localhost:7137/api/Category`,
     fetcher
@@ -131,7 +130,7 @@ const ProductEdit = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Product Create" />
+      <Breadcrumb pageName="Product Edit" />
 
       <div className="flex gap-10">
         <div className="flex flex-col gap-9">
@@ -139,7 +138,7 @@ const ProductEdit = () => {
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
-                Create product
+                Edit product
               </h3>
             </div>
             <form onSubmit={handleSubmit(handleUpdateProduct)}>
@@ -245,6 +244,9 @@ const ProductEdit = () => {
             image={image}
           ></ImageUpload>
         </div>
+      </div>
+      <div className="mt-5">
+        <ProductSku productSkus={productData.productSkuDtos} productId={productId} onChangeSku={() => mutate()}></ProductSku>
       </div>
     </DefaultLayout>
   );

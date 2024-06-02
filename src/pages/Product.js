@@ -5,7 +5,7 @@ import TableThree from '../components/Tables/TableThree';
 import TableTwo from '../components/Tables/TableTwo';
 import DefaultLayout from '../layout/DefaultLayout';
 import useSWR, {Fetcher} from 'swr'
-import ProductTable from '../components/Tables/ProductTable';
+
 import { fetcher } from '../service/fetchconfig';
 import SelectCategory from '../components/Forms/SelectGroup/SelectCategory';
 import SelectBrand from '../components/Forms/SelectGroup/SelectBrand';
@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import NoFoundProduct from './UiElements/NoFoundProduct';
+import ProductTable from '../components/Product/ProductTable';
 
 
 const ProductPage = () => {
