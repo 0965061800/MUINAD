@@ -22,6 +22,7 @@ import ProductEdit from './pages/ProductEdit';
 import ProductCreate from './pages/ProductCreate';
 import Order from './pages/Order';
 import OrderDetail from './pages/OrderDetail';
+import UserDetail from './pages/UserDetail';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -55,6 +56,15 @@ function App() {
             <>
               <PageTitle title="User | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               <User />
+            </>
+          }
+        />
+        <Route
+          path="/user/:userId"
+          element={
+            <>
+              <PageTitle title="User | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <UserDetail />
             </>
           }
         />
