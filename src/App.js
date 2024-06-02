@@ -21,6 +21,7 @@ import ProductDetail from './pages/ProductDetail';
 import ProductEdit from './pages/ProductEdit';
 import ProductCreate from './pages/ProductCreate';
 import Order from './pages/Order';
+import OrderDetail from './pages/OrderDetail';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -135,6 +136,15 @@ function App() {
             <>
               <PageTitle title="Order | MuIn" />
               <Order />
+            </>
+          }
+        />
+        <Route
+          path="/orders/:orderId"
+          element={
+            <>
+              <PageTitle title="Order Detail | MuIn" />
+              <OrderDetail />
             </>
           }
         />

@@ -79,13 +79,11 @@ const ProductPage = () => {
   },[data]);
 
   const handleFilterProduct = (values) => {
-    console.log(values);
     let query = {
       CategoryId : values.categoryId ? parseInt(values.categoryId, 10):0,
       BrandId : values.brandId ? parseInt(values.brandId, 10) : 0,
       FeatureId: values.featureId ? parseInt(values.featureId, 10) : 0,
     }
-    console.log(query);
     axios.get('https://localhost:7137/api/Product', { params: query })
     .then(response => {
         setProducts(response.data.data)
