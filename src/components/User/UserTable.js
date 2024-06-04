@@ -45,7 +45,7 @@ const UserTable = ({ users = [] }) => {
                 <img src={UserImg} alt="userImage" className="w-10" />
               </div>
               <p className="hidden text-black dark:text-white sm:block">
-                {user.userName}
+                {user.firstName}
               </p>
             </div>
 

@@ -12,7 +12,7 @@ const OrderInfo = ({ orderInfo, orderDetails = [] }) => {
             <span className="text-black font-bold bg-blue-200 dark:text-white dark:bg-blue-900 px-3 rounded-lg">
               User
             </span>
-            : {orderInfo.userName}
+            : {orderInfo.firstName}
           </p>
           <p>
             <span className="text-black font-bold bg-blue-200 dark:text-white dark:bg-blue-900 px-3 rounded-lg">
