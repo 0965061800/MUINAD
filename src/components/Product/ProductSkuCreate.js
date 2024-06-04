@@ -38,7 +38,6 @@ const ProductSkuCreate = ({productId}) => {
   );
 
   const handleCreateSku = (values) => {
-    console.log(values);
       axios.post(`https://localhost:7137/api/ProductSku/`, {
         ...values
       })

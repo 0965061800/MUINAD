@@ -17,7 +17,6 @@ import ImageUpload from "../components/Images/ImageUpload";
 import useFirebaseImage from "../hooks/useFirebaseImage";
 import axios from "axios";
 import { toast } from "react-toastify";
-import ProductSkuTable from "../components/Product/ProductSkuTable";
 import ProductSku from "../components/Product/ProductSku";
 
 const  imageUrlName = "productImage"

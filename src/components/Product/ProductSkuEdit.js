@@ -38,6 +38,7 @@ const ProductSkuEdit = ({ skuId, onSkuEdited = f => f , onChangeSku = f => f}) =
           ImageName: ""
         })
         .then(function (response) {
+          
           console.log(response);
         })
         .catch(function (error) {

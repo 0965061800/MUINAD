@@ -56,10 +56,8 @@ export default function useFirebaseImage(
     );
   };
   const handleSelectImage = (e) => {
-    console.log(imageName, imageUrlName)
     const file = e.target.files[0];
     if (!file) return;
-    console.log(1);
     setValue(imageName, file.name);
     handleUploadImage(file);
   };

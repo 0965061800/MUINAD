@@ -15,8 +15,6 @@ const ProductDetail = () => {
   const [product, setProduct] = useState();
 
   const { productId } = useParams();
-  console.log(productId);
-  // const [product, setProduct] = useState(null);
 
   const { data, error } = useSWR(
     `https://localhost:7137/api/Product/${productId}`,

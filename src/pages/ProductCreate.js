@@ -4,7 +4,6 @@ import DefaultLayout from "../layout/DefaultLayout";
 import { useForm, useWatch } from "react-hook-form";
 import useSWR from "swr";
 import { fetcher } from "../service/fetchconfig";
-import { useParams } from "react-router-dom";
 import Input from "../components/inputs/Input";
 import SelectCategory from "../components/Forms/SelectGroup/SelectCategory";
 import flattenCategories from "../utils/flatternCat";
@@ -60,13 +59,8 @@ const ProductCreate = () => {
     defaultValues: {},
     resolver: yupResolver(schema),
   });
-
-
-
   const {
     image,
-    handleResetUpload,
-    setImage,
     progress,
     handleSelectImage,
     handleDeleteImage,
@@ -110,7 +104,6 @@ const ProductCreate = () => {
   }, [errors]);
 
   const handleCreateProduct = async (values) => {
-
     axios.post('https://localhost:7137/api/Product', {
         ...values, 
         specifications: content,
@@ -121,7 +114,9 @@ const ProductCreate = () => {
         productPrice: parseFloat(values.productPrice)
       })
       .then(function (response) {
+        console.log(1);
         Swal.fire("Created!", "Your product has been created.", "success");
+        reset();
       })
       .catch(function (error) {
         console.log(error);
@@ -129,8 +124,6 @@ const ProductCreate = () => {
   };
 
   const watchBestSeller = watch("bestSeller");
-  // const watchActive = watch("active");
-  // console.log(watchBestSeller,watchActive);
 
   if (catError || brandError || featureError || colorError) {
     return <div>Error loading data</div>;
@@ -187,15 +180,6 @@ const ProductCreate = () => {
                       onClick={() => setValue("bestSeller", !watchBestSeller)}
                     />
                   </div>
-                  {/* <div className="w-full xl:w-1/2 flex gap-4">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Active
-                    </label>
-                    <Toggle
-                      on={watchActive === true}
-                      onClick={() => setValue("active", !watchActive)}
-                    />
-                  </div> */}
                   <div className="w-full xl:w-1/2 flex gap-4">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Sale

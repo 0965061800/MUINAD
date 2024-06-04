@@ -1,7 +1,6 @@
 import React from 'react';
 import DefaultLayout from '../layout/DefaultLayout';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
-import OrderInfo from '../components/Orders/OrderInfo';
 import useSWR from 'swr';
 import { fetcher } from '../service/fetchconfig';
 import UserInfo from '../components/User/UserInfo';
