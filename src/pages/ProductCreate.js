@@ -61,6 +61,7 @@ const ProductCreate = () => {
   });
   const {
     image,
+    handleResetUpload,
     progress,
     handleSelectImage,
     handleDeleteImage,
@@ -116,7 +117,11 @@ const ProductCreate = () => {
       .then(function (response) {
         console.log(1);
         Swal.fire("Created!", "Your product has been created.", "success");
-        reset();
+        reset({
+          image:"",
+        });
+        setContent("");
+        handleResetUpload();
       })
       .catch(function (error) {
         console.log(error);

@@ -23,7 +23,7 @@ const ProductSku = ({ productSkus = [] , productId, onChangeSku = f => f}) => {
         ></ProductSkuTable>
       </div>
       {action === "create" ? (
-        <ProductSkuCreate productId={productId}></ProductSkuCreate>
+        <ProductSkuCreate productId={productId} onChangeSku={onChangeSku}></ProductSkuCreate>
       ) : (
           <ProductSkuEdit skuId={skuTarget} onChangeSku={onChangeSku}></ProductSkuEdit>
       )}

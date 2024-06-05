@@ -14,7 +14,7 @@ import Input from "../inputs/Input";
 
 let imageUrlName = "skuImage";
 let imageName = "imageName";
-const ProductSkuCreate = ({productId}) => {
+const ProductSkuCreate = ({productId, onChangeSku = f => f}) => {
   const {
     control,
     reset,
@@ -29,7 +29,7 @@ const ProductSkuCreate = ({productId}) => {
       productId:productId
     },
   });
-  const { image, progress, handleSelectImage, handleDeleteImage } =
+  const { image, handleResetUpload, progress, handleSelectImage, handleDeleteImage } =
     useFirebaseImage(setValue, getValues,imageUrlName, imageName);
 
   const { data: colorList, error: colorError } = useSWR(
@@ -42,30 +42,15 @@ const ProductSkuCreate = ({productId}) => {
         ...values
       })
       .then(function (response) {
-        // onCategoryEdited();
-        Swal.fire("Success!", "Your product has been edited.", "success");
+        Swal.fire("Success!", "Your product has been created.", "success");
+        reset({});
+        handleResetUpload();
+        onChangeSku();
       })
       .catch(function (error) {
         Swal.fire("Oopss!", "Somethings went wrong")
       });
   };
-  // useEffect(() => {
-  //   const arrErroes = Object.values(errors);
-  //   console.log(arrErroes);
-  //   if (arrErroes.length > 0) {
-  //     toast.error(arrErroes[0]?.message, {
-  //       pauseOnHover: false,
-  //       delay: 0,
-  //     });
-  //   }
-  // }, [errors]);
-
-  // useEffect(() => {
-  //     if (catData) {
-  //       reset(catData);
-  //       setImage(catData.catImage)
-  //     }
-  //   }, [catData, reset, setImage]);
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 h-max">
